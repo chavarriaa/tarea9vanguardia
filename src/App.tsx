@@ -1,26 +1,39 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import { CharacterAPI } from "./API/";
+import CardChar from "./components/CardChar";
+import Container from 'react-bootstrap/Container';
+import CharacterProps from "./interfaces/Character";
+import FormCharacter from "./components/FormChar";
+import { Button } from "react-bootstrap";
 
-function App() {
+
+
+export default function App() {
+const [CharacterList, setCharacterList] = React.useState<any>([]);
+  async function fetch() {
+    try {
+      const result = await CharacterAPI.get(10, 10);
+      setCharacterList(result);
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
+  React.useState(() => {
+    fetch();
+
+  });
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <h1>hello</h1>
+      <FormCharacter trigger={<Button>Agregar</Button>}/>
+      <Container style={{display:'flex',flexWrap:'wrap'}}>
+        {CharacterList.map((item:CharacterProps)=>(
+          <CardChar {...item} />
+        ))}
+      </Container>
+      
+    </>
   );
 }
-
-export default App;
